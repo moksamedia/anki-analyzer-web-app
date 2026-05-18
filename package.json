@@ -1,0 +1,23 @@
+{
+  "name": "lrztp-anki-analyzer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "postbuild": "cp dist/index.html dist/404.html",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.6",
+    "dompurify": "^3.4.2",
+    "idb-keyval": "^6.2.2",
+    "marked": "^18.0.3",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.3"
+  }
+}
