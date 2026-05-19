@@ -39,6 +39,21 @@ h2 { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
 
 .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
 
+.header-links {
+  margin-top: -0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.text-link {
+  font-size: 13px;
+  color: var(--teal-dark);
+  text-decoration: underline;
+}
+
+.text-link:hover {
+  opacity: 0.85;
+}
+
 .card {
   background: var(--bg);
   border: 0.5px solid var(--border);

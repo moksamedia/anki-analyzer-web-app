@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { loadAllData, fetchDeckNames } from './composables/useAnki.js'
 import { computeOverview } from './composables/useAnalysis.js'
 import {
@@ -17,6 +17,7 @@ import StrugglingTab from './components/StrugglingTab.vue'
 import HistoryTab from './components/HistoryTab.vue'
 import AITab from './components/AITab.vue'
 import CurrentCardTab from './components/CurrentCardTab.vue'
+import InstallPage from './components/InstallPage.vue'
 import SettingsTab from './components/SettingsTab.vue'
 
 const TABS = [
@@ -28,6 +29,12 @@ const TABS = [
   { id: 'current-card', label: 'Current card' },
   { id: 'settings', label: 'Settings' }
 ]
+
+const isInstallPage = ref(location.hash === '#install')
+
+function syncRoute() {
+  isInstallPage.value = location.hash === '#install'
+}
 
 const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000
 
@@ -66,6 +73,9 @@ async function onSchedulerOverrideChange() {
 }
 
 onMounted(async () => {
+  syncRoute()
+  window.addEventListener('hashchange', syncRoute)
+
   try {
     const [snapshot, savedSelection, savedOverride] = await Promise.all([
       loadAnkiSnapshot(),
@@ -84,6 +94,10 @@ onMounted(async () => {
   } finally {
     isLoadingCache.value = false
   }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', syncRoute)
 })
 
 async function openPicker() {
@@ -190,9 +204,14 @@ const subdeckCount = computed(() => {
 </script>
 
 <template>
-  <div class="page">
+  <InstallPage v-if="isInstallPage" />
+
+  <div v-else class="page">
     <h1>LRZTP Anki Analyzer</h1>
     <p class="subtitle">Connects to AnkiConnect on localhost:8765 · AI via Anthropic or Google Gemini APIs</p>
+    <p class="header-links">
+      <a href="#install" class="text-link">Installation &amp; usage instructions</a>
+    </p>
 
     <div v-if="error" class="error" style="display: block;">
       <strong>Error: {{ error }}</strong><br />
